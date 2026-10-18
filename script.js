@@ -1,13 +1,5 @@
-
-/* =====================================
-   PH RECIPE RESCUE
-   Filipino Dish Finder
-   TheMealDB API + Filipino Recipes
-   ===================================== */
-
 const API_URL = "https://www.themealdb.com/api/json/v1/1";
 
-// HTML elements
 const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
@@ -21,7 +13,6 @@ const backBtn = document.getElementById("backBtn");
 const searchSection = document.querySelector(".search-section");
 const resultsSection = document.getElementById("resultsSection");
 
-// Filipino recipes with food photo URLs
 const filipinoRecipes = [
     {
         id: "local-adobo",
@@ -227,7 +218,6 @@ const filipinoRecipes = [
     }
 ];
 
-// Placeholder used if a food photo cannot load
 function createPlaceholderImage() {
     const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
@@ -243,14 +233,12 @@ function createPlaceholderImage() {
     return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
 }
 
-// Get the best available image for a recipe
 function getRecipeImage(recipe) {
     return recipe.strMealThumb && recipe.strMealThumb.trim()
         ? recipe.strMealThumb
         : createPlaceholderImage();
 }
 
-// Show a status message
 function showStatus(message, type = "") {
     status.textContent = message;
     status.className = "status-message";
@@ -260,7 +248,6 @@ function showStatus(message, type = "") {
     }
 }
 
-// Show or hide the loading state
 function setLoading(isLoading, message = "Finding recipes...") {
     searchBtn.disabled = isLoading;
     randomBtn.disabled = isLoading;
@@ -273,7 +260,6 @@ function setLoading(isLoading, message = "Finding recipes...") {
     }
 }
 
-// Safely request data from TheMealDB
 async function fetchMeals(url) {
     const response = await fetch(url);
 
@@ -285,7 +271,6 @@ async function fetchMeals(url) {
     return data.meals || [];
 }
 
-// Convert an API meal into the format used by this website
 function convertApiMeal(meal) {
     const ingredients = [];
 
@@ -312,7 +297,6 @@ function convertApiMeal(meal) {
     };
 }
 
-// Search local Filipino recipes
 function searchLocalRecipes(query) {
     const searchTerm = query.toLowerCase();
 
@@ -328,11 +312,9 @@ function searchLocalRecipes(query) {
     });
 }
 
-// Search TheMealDB by dish name and ingredient
 async function searchApiRecipes(query) {
     const results = new Map();
 
-    // Search by meal name
     try {
         const nameUrl = `${API_URL}/search.php?s=${encodeURIComponent(query)}`;
         const mealsByName = await fetchMeals(nameUrl);
@@ -345,14 +327,12 @@ async function searchApiRecipes(query) {
         console.warn("Meal-name search failed:", error);
     }
 
-    // Search by a single ingredient
     try {
         const ingredient = query.trim().replace(/\s+/g, "_");
         const ingredientUrl =
             `${API_URL}/filter.php?i=${encodeURIComponent(ingredient)}`;
         const ingredientMeals = await fetchMeals(ingredientUrl);
 
-        // Fetch full details for up to six ingredient matches
         const limitedMeals = ingredientMeals.slice(0, 6);
 
         const detailedMeals = await Promise.all(
@@ -385,7 +365,6 @@ async function searchApiRecipes(query) {
     return Array.from(results.values());
 }
 
-// Create an HTML element safely
 function createTextElement(tag, text, className = "") {
     const element = document.createElement(tag);
     element.textContent = text;
@@ -397,7 +376,6 @@ function createTextElement(tag, text, className = "") {
     return element;
 }
 
-// Set up a recipe image and a reliable fallback
 function createRecipeImage(recipe, className = "") {
     const image = document.createElement("img");
 
@@ -417,7 +395,6 @@ function createRecipeImage(recipe, className = "") {
     return image;
 }
 
-// Display recipe cards
 function displayRecipes(recipes) {
     recipeContainer.replaceChildren();
 
@@ -436,14 +413,8 @@ function displayRecipes(recipes) {
         content.className = "recipe-card-content";
 
         const name = createTextElement("h3", recipe.strMeal);
-        const category = createTextElement(
-            "p",
-            `Category: ${recipe.strCategory}`
-        );
-        const cuisine = createTextElement(
-            "p",
-            `Cuisine: ${recipe.strArea}`
-        );
+        const category = createTextElement("p", `Category: ${recipe.strCategory}`);
+        const cuisine = createTextElement("p", `Cuisine: ${recipe.strArea}`);
 
         const viewButton = createTextElement(
             "button",
@@ -465,7 +436,6 @@ function displayRecipes(recipes) {
     );
 }
 
-// Search button behavior
 async function handleSearch(event) {
     if (event) {
         event.preventDefault();
@@ -490,7 +460,6 @@ async function handleSearch(event) {
         const localMatches = searchLocalRecipes(query);
         const apiMatches = await searchApiRecipes(query);
 
-        // Filipino matches first; avoid duplicate recipe names
         const combined = [...localMatches];
         const existingNames = new Set(
             combined.map(recipe => recipe.strMeal.toLowerCase())
@@ -529,7 +498,6 @@ async function handleSearch(event) {
     }
 }
 
-// Random recipe button behavior
 async function handleRandomRecipe() {
     setLoading(true, "Finding a random recipe...");
     recipeDetails.classList.add("hidden");
@@ -547,8 +515,7 @@ async function handleRandomRecipe() {
         }
 
         if (meals.length > 0) {
-            const selectedMeal =
-                meals[Math.floor(Math.random() * meals.length)];
+            const selectedMeal = meals[Math.floor(Math.random() * meals.length)];
 
             const details = await fetchMeals(
                 `${API_URL}/lookup.php?i=${encodeURIComponent(selectedMeal.idMeal)}`
@@ -586,7 +553,6 @@ async function handleRandomRecipe() {
     }
 }
 
-// Display the full recipe details
 function showRecipeDetails(recipe) {
     detailsContent.replaceChildren();
 
@@ -639,7 +605,6 @@ function showRecipeDetails(recipe) {
     });
 }
 
-// Back to search button behavior
 function handleBackToSearch() {
     recipeDetails.classList.add("hidden");
     searchSection.classList.remove("hidden");
@@ -651,12 +616,10 @@ function handleBackToSearch() {
     });
 }
 
-// Connect the buttons and form to their functions
 searchForm.addEventListener("submit", handleSearch);
 randomBtn.addEventListener("click", handleRandomRecipe);
 backBtn.addEventListener("click", handleBackToSearch);
 
-// Let the user press Enter to search
 searchInput.addEventListener("keydown", event => {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -664,6 +627,5 @@ searchInput.addEventListener("keydown", event => {
     }
 });
 
-// Confirm that JavaScript loaded successfully
 console.log("PH Recipe Rescue JavaScript loaded successfully.");
 showStatus("Search for an ingredient or Filipino dish.");
