@@ -21,14 +21,14 @@ const backBtn = document.getElementById("backBtn");
 const searchSection = document.querySelector(".search-section");
 const resultsSection = document.getElementById("resultsSection");
 
-// Filipino recipes used when the API has no matching dish
+// Filipino recipes with food photo URLs
 const filipinoRecipes = [
     {
         id: "local-adobo",
         strMeal: "Chicken Adobo",
         strCategory: "Main Dish",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://www.themealdb.com/images/media/meals/uuuspp1511297945.jpg",
         ingredients: [
             "1 kg chicken",
             "1/2 cup soy sauce",
@@ -49,7 +49,7 @@ const filipinoRecipes = [
         strMeal: "Sinigang na Baboy",
         strCategory: "Soup",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/pork,soup?lock=101",
         ingredients: [
             "500 g pork",
             "1 packet tamarind soup mix",
@@ -70,7 +70,7 @@ const filipinoRecipes = [
         strMeal: "Bicol Express",
         strCategory: "Main Dish",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/pork,coconut?lock=102",
         ingredients: [
             "500 g pork, sliced",
             "1 cup coconut milk",
@@ -91,7 +91,7 @@ const filipinoRecipes = [
         strMeal: "Tinolang Manok",
         strCategory: "Soup",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/chicken,soup?lock=103",
         ingredients: [
             "500 g chicken",
             "1 piece ginger",
@@ -112,7 +112,7 @@ const filipinoRecipes = [
         strMeal: "Pancit Bihon",
         strCategory: "Main Dish",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/filipino,noodles?lock=104",
         ingredients: [
             "250 g bihon noodles",
             "Chicken, sliced",
@@ -134,7 +134,7 @@ const filipinoRecipes = [
         strMeal: "Tortang Talong",
         strCategory: "Main Dish",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/eggplant,omelette?lock=105",
         ingredients: [
             "2 eggplants",
             "2 eggs",
@@ -153,7 +153,7 @@ const filipinoRecipes = [
         strMeal: "Pork Menudo",
         strCategory: "Main Dish",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/pork,stew?lock=106",
         ingredients: [
             "500 g pork, cubed",
             "Tomato sauce",
@@ -175,7 +175,7 @@ const filipinoRecipes = [
         strMeal: "Banana Turon",
         strCategory: "Snack",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/banana,dessert?lock=107",
         ingredients: [
             "Ripe saba bananas",
             "Spring roll wrappers",
@@ -193,7 +193,7 @@ const filipinoRecipes = [
         strMeal: "Leche Flan",
         strCategory: "Dessert",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/caramel,custard?lock=108",
         ingredients: [
             "Egg yolks",
             "1 can condensed milk",
@@ -212,7 +212,7 @@ const filipinoRecipes = [
         strMeal: "Sinangag",
         strCategory: "Main Dish",
         strArea: "Filipino",
-        strMealThumb: "",
+        strMealThumb: "https://loremflickr.com/600/400/garlic,fried,rice?lock=109",
         ingredients: [
             "3 cups cooked rice",
             "4 cloves garlic, minced",
@@ -227,7 +227,7 @@ const filipinoRecipes = [
     }
 ];
 
-// Create a simple food illustration for local recipes without API images
+// Placeholder used if a food photo cannot load
 function createPlaceholderImage() {
     const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
@@ -241,6 +241,13 @@ function createPlaceholderImage() {
     `;
 
     return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+}
+
+// Get the best available image for a recipe
+function getRecipeImage(recipe) {
+    return recipe.strMealThumb && recipe.strMealThumb.trim()
+        ? recipe.strMealThumb
+        : createPlaceholderImage();
 }
 
 // Show a status message
@@ -288,7 +295,9 @@ function convertApiMeal(meal) {
 
         if (ingredient && ingredient.trim()) {
             const amount = measure ? measure.trim() : "";
-            ingredients.push(amount ? `${amount} ${ingredient.trim()}` : ingredient.trim());
+            ingredients.push(
+                amount ? `${amount} ${ingredient.trim()}` : ingredient.trim()
+            );
         }
     }
 
@@ -339,16 +348,18 @@ async function searchApiRecipes(query) {
     // Search by a single ingredient
     try {
         const ingredient = query.trim().replace(/\s+/g, "_");
-        const ingredientUrl = `${API_URL}/filter.php?i=${encodeURIComponent(ingredient)}`;
+        const ingredientUrl =
+            `${API_URL}/filter.php?i=${encodeURIComponent(ingredient)}`;
         const ingredientMeals = await fetchMeals(ingredientUrl);
 
-        // Fetch complete recipe details for up to 6 ingredient matches
+        // Fetch full details for up to six ingredient matches
         const limitedMeals = ingredientMeals.slice(0, 6);
 
         const detailedMeals = await Promise.all(
             limitedMeals.map(async meal => {
                 try {
-                    const detailsUrl = `${API_URL}/lookup.php?i=${encodeURIComponent(meal.idMeal)}`;
+                    const detailsUrl =
+                        `${API_URL}/lookup.php?i=${encodeURIComponent(meal.idMeal)}`;
                     const details = await fetchMeals(detailsUrl);
 
                     if (details.length > 0) {
@@ -386,6 +397,26 @@ function createTextElement(tag, text, className = "") {
     return element;
 }
 
+// Set up a recipe image and a reliable fallback
+function createRecipeImage(recipe, className = "") {
+    const image = document.createElement("img");
+
+    if (className) {
+        image.className = className;
+    }
+
+    image.src = getRecipeImage(recipe);
+    image.alt = `${recipe.strMeal} food photo`;
+    image.loading = "lazy";
+
+    image.onerror = () => {
+        image.onerror = null;
+        image.src = createPlaceholderImage();
+    };
+
+    return image;
+}
+
 // Display recipe cards
 function displayRecipes(recipes) {
     recipeContainer.replaceChildren();
@@ -399,21 +430,20 @@ function displayRecipes(recipes) {
         const card = document.createElement("article");
         card.className = "recipe-card";
 
-        const image = document.createElement("img");
-        image.src = recipe.strMealThumb || createPlaceholderImage();
-        image.alt = recipe.strMeal;
-        image.loading = "lazy";
-        image.onerror = () => {
-            image.onerror = null;
-            image.src = createPlaceholderImage();
-        };
+        const image = createRecipeImage(recipe);
 
         const content = document.createElement("div");
         content.className = "recipe-card-content";
 
         const name = createTextElement("h3", recipe.strMeal);
-        const category = createTextElement("p", `Category: ${recipe.strCategory}`);
-        const cuisine = createTextElement("p", `Cuisine: ${recipe.strArea}`);
+        const category = createTextElement(
+            "p",
+            `Category: ${recipe.strCategory}`
+        );
+        const cuisine = createTextElement(
+            "p",
+            `Cuisine: ${recipe.strArea}`
+        );
 
         const viewButton = createTextElement(
             "button",
@@ -460,7 +490,7 @@ async function handleSearch(event) {
         const localMatches = searchLocalRecipes(query);
         const apiMatches = await searchApiRecipes(query);
 
-        // Show Filipino matches first, then other API results if needed
+        // Filipino matches first; avoid duplicate recipe names
         const combined = [...localMatches];
         const existingNames = new Set(
             combined.map(recipe => recipe.strMeal.toLowerCase())
@@ -508,7 +538,6 @@ async function handleRandomRecipe() {
     sectionTitle.textContent = "RECIPE RESULTS";
 
     try {
-        // Try the Filipino area first
         let meals = [];
 
         try {
@@ -518,7 +547,9 @@ async function handleRandomRecipe() {
         }
 
         if (meals.length > 0) {
-            const selectedMeal = meals[Math.floor(Math.random() * meals.length)];
+            const selectedMeal =
+                meals[Math.floor(Math.random() * meals.length)];
+
             const details = await fetchMeals(
                 `${API_URL}/lookup.php?i=${encodeURIComponent(selectedMeal.idMeal)}`
             );
@@ -529,7 +560,6 @@ async function handleRandomRecipe() {
             }
         }
 
-        // If the API has no Filipino dishes, choose a local Filipino recipe
         const randomLocal = filipinoRecipes[
             Math.floor(Math.random() * filipinoRecipes.length)
         ];
@@ -560,14 +590,7 @@ async function handleRandomRecipe() {
 function showRecipeDetails(recipe) {
     detailsContent.replaceChildren();
 
-    const image = document.createElement("img");
-    image.className = "details-image";
-    image.src = recipe.strMealThumb || createPlaceholderImage();
-    image.alt = recipe.strMeal;
-    image.onerror = () => {
-        image.onerror = null;
-        image.src = createPlaceholderImage();
-    };
+    const image = createRecipeImage(recipe, "details-image");
 
     const info = document.createElement("div");
     info.className = "details-info";
@@ -604,14 +627,16 @@ function showRecipeDetails(recipe) {
     );
 
     content.appendChild(instructions);
-
     detailsContent.append(image, info, content);
 
     searchSection.classList.add("hidden");
     resultsSection.classList.add("hidden");
     recipeDetails.classList.remove("hidden");
 
-    recipeDetails.scrollIntoView({ behavior: "smooth", block: "start" });
+    recipeDetails.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 }
 
 // Back to search button behavior
