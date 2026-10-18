@@ -1,0 +1,366 @@
+
+/* ==============================
+   PH RECIPE RESCUE
+   Website Design
+   ============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f8f5ed;
+    color: #26352b;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Main Website Container */
+.app-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 35px 0;
+}
+
+/* Header */
+.app-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.app-header h1 {
+    color: #285943;
+    font-size: 2.3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+.app-header p {
+    color: #77715f;
+    font-size: 1rem;
+}
+
+/* Search Section */
+.search-section {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.search-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+    color: #344c3b;
+}
+
+/* Search Input and Button */
+.search-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 15px;
+    font-size: 1rem;
+    border: 1px solid #d5d9cf;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #26352b;
+    outline: none;
+}
+
+.search-form input:focus {
+    border-color: #39805a;
+    box-shadow: 0 0 0 3px rgba(57, 128, 90, 0.15);
+}
+
+.search-form input::placeholder {
+    color: #999999;
+}
+
+.search-form button,
+.random-button,
+.back-button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    background-color: #285943;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.search-form button:hover,
+.random-button:hover,
+.back-button:hover {
+    background-color: #1c4231;
+    transform: translateY(-1px);
+}
+
+.search-form button:focus-visible,
+.random-button:focus-visible,
+.back-button:focus-visible,
+.view-recipe-btn:focus-visible {
+    outline: 3px solid #e5a34b;
+    outline-offset: 3px;
+}
+
+/* Random Recipe Button */
+.random-button {
+    display: block;
+    margin: 15px auto 0;
+    background-color: #d88b37;
+    color: #ffffff;
+}
+
+.random-button:hover {
+    background-color: #b97023;
+}
+
+/* Recipe Results Section */
+.results-section {
+    width: 100%;
+}
+
+.section-title,
+.details-heading {
+    color: #285943;
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e4dfd2;
+}
+
+/* Recipe Cards: Two Columns */
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+}
+
+/* Individual Recipe Card */
+.recipe-card {
+    background-color: #ffffff;
+    border: 1px solid #e7e3d9;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(40, 50, 35, 0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.recipe-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(40, 50, 35, 0.12);
+}
+
+/* Recipe Image */
+.recipe-card img {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background-color: #eee9dc;
+}
+
+/* Recipe Card Information */
+.recipe-card-content {
+    padding: 18px;
+}
+
+.recipe-card h3 {
+    color: #285943;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+}
+
+.recipe-card p {
+    color: #6d7168;
+    font-size: 0.92rem;
+    margin-bottom: 5px;
+}
+
+/* View Recipe Button */
+.view-recipe-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 7px;
+    background-color: #d88b37;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.view-recipe-btn:hover {
+    background-color: #b97023;
+}
+
+/* Status and Error Messages */
+.status-message {
+    text-align: center;
+    color: #77715f;
+    font-size: 0.95rem;
+    margin: 25px 0;
+    overflow-wrap: anywhere;
+}
+
+.status-message.error {
+    color: #b42318;
+}
+
+.status-message.success {
+    color: #285943;
+}
+
+/* Recipe Details Section */
+.recipe-details {
+    width: 100%;
+    max-width: 850px;
+    margin: 35px auto 0;
+    padding: 25px;
+    background-color: #ffffff;
+    border: 1px solid #e7e3d9;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(40, 50, 35, 0.08);
+}
+
+.recipe-details.hidden {
+    display: none;
+}
+
+/* Details Image */
+.details-image {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    max-height: 350px;
+    object-fit: cover;
+    margin: 0 auto 25px;
+    border-radius: 10px;
+}
+
+/* Details Information */
+.details-info {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.details-info h3 {
+    color: #285943;
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+.details-info p {
+    color: #6d7168;
+    margin: 5px 0;
+}
+
+/* Ingredients and Instructions */
+.details-content {
+    margin: 25px 0;
+}
+
+.details-content h3 {
+    color: #285943;
+    font-size: 1.2rem;
+    margin: 20px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e4dfd2;
+}
+
+.details-content ul,
+.details-content ol {
+    padding-left: 25px;
+    margin-bottom: 20px;
+}
+
+.details-content li {
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+.details-content p {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+/* Back to Search Button */
+.back-button {
+    display: block;
+    margin: 30px auto 0;
+}
+
+/* Loading Animation */
+.loading {
+    text-align: center;
+    color: #285943;
+    padding: 20px;
+}
+
+/* Tablet and Mobile Layout */
+@media (max-width: 650px) {
+    .app-container {
+        width: 92%;
+        padding: 25px 0;
+    }
+
+    .app-header h1 {
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+
+    .search-section h2 {
+        font-size: 1.15rem;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-form input,
+    .search-form button {
+        width: 100%;
+        min-height: 45px;
+    }
+
+    .random-button {
+        width: 100%;
+        max-width: 650px;
+        min-height: 45px;
+    }
+
+    .recipe-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .recipe-card img {
+        height: 210px;
+    }
+
+    .recipe-details {
+        padding: 18px;
+    }
+
+    .section-title,
+    .details-heading {
+        font-size: 1.2rem;
+    }
+}

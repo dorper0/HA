@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PH Recipe Rescue</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+<body>
+    <main class="app-container">
+
+        <header class="app-header">
+            <h1>PH RECIPE RESCUE</h1>
+            <p>A Smart Filipino Dish Finder</p>
+        </header>
+
+        <section class="search-section">
+            <h2>What ingredient do you have?</h2>
+
+            <form id="searchForm" class="search-form">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Enter ingredient or dish..."
+                    aria-label="Enter ingredient or dish"
+                >
+                <button type="submit" id="searchBtn">SEARCH</button>
+            </form>
+
+            <button type="button" id="randomBtn" class="random-button">
+                RANDOM RECIPE
+            </button>
+        </section>
+
+        <section class="results-section" id="resultsSection">
+            <h2 class="section-title" id="sectionTitle">RECIPE RESULTS</h2>
+
+            <div
+                id="recipeContainer"
+                class="recipe-grid"
+                aria-live="polite"
+            ></div>
+
+            <p id="status" class="status-message" role="status">
+                Search for an ingredient or Filipino dish.
+            </p>
+        </section>
+
+        <section id="recipeDetails" class="recipe-details hidden">
+            <h2 class="details-heading">RECIPE DETAILS</h2>
+            <div id="detailsContent"></div>
+            <button type="button" id="backBtn" class="back-button">
+                BACK TO SEARCH
+            </button>
+        </section>
+
+    </main>
+</body>
+</html>
