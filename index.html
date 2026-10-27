@@ -1,61 +1,198 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fbf8f1">
+
     <title>Sangkap to Sarap</title>
-    <link rel="stylesheet" href="./style.css">
-    <script src="./script.js" defer></script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <main class="app-container">
 
-        <header class="app-header">
-            <h1>Sangkap to Sarap</h1>
-            <p>A Smart Filipino Dish Finder</p>
-        </header>
+    <header class="site-header">
+        <a class="brand" href="#home">
+            Sangkap to Sarap<span>.</span>
+        </a>
 
-        <section class="search-section">
-            <h2>What ingredient do you have?</h2>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#recent">Recently Viewed</a>
+        </nav>
+    </header>
 
-            <form id="searchForm" class="search-form">
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Enter ingredient or dish..."
-                    aria-label="Enter ingredient or dish"
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p class="eyebrow">YOUR NEXT DELICIOUS DISCOVERY</p>
+
+                <h1>Sangkap to<br><em>Sarap</em></h1>
+
+                <p class="intro">
+                    Explore recipes, discover new favorites, and find
+                    something delicious to make today.
+                </p>
+
+                <form id="searchForm" class="search">
+                    <input
+                        id="searchInput"
+                        type="search"
+                        placeholder="Search dishes, like chicken or beef..."
+                        aria-label="Search recipes"
+                    >
+
+                    <button class="button primary" type="submit">
+                        Search
+                    </button>
+                </form>
+
+                <div class="quick">
+                    <span>Popular:</span>
+                    <button type="button" data-query="chicken">Chicken</button>
+                    <button type="button" data-query="beef">Beef</button>
+                    <button type="button" data-query="pork">Pork</button>
+                </div>
+            </div>
+
+            <div class="hero-art">
+                <div class="circle"></div>
+
+                <img
+                    src="https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg"
+                    alt="Prepared meal"
                 >
-                <button type="submit" id="searchBtn">SEARCH</button>
-            </form>
 
-            <button type="button" id="randomBtn" class="random-button">
-                RANDOM RECIPE
-            </button>
+                <span class="sticker">MADE WITH ♥</span>
+            </div>
         </section>
 
-        <section class="results-section" id="resultsSection">
-            <h2 class="section-title" id="sectionTitle">RECIPE RESULTS</h2>
+        <section class="section" id="recipes">
+            <div class="heading">
+                <div>
+                    <p class="eyebrow">LET'S GET COOKING</p>
+                    <h2>Explore recipes</h2>
+                </div>
 
-            <div
-                id="recipeContainer"
-                class="recipe-grid"
-                aria-live="polite"
-            ></div>
+                <p>Something delicious is waiting for you.</p>
+            </div>
 
-            <p id="status" class="status-message" role="status">
-                Search for an ingredient or Filipino dish.
+            <div class="toolbar">
+                <div class="tabs">
+                    <button
+                        class="filter active"
+                        data-filter="all"
+                        type="button"
+                    >
+                        All recipes
+                    </button>
+
+                    <button
+                        class="filter"
+                        data-filter="favorites"
+                        type="button"
+                    >
+                        ♥ Favorites
+                    </button>
+                </div>
+
+                <div class="selects">
+                    <select
+                        id="categoryFilter"
+                        aria-label="Filter by category"
+                    >
+                        <option value="all">All categories</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="result">
+                <strong id="resultTitle">Popular recipes</strong>
+                <span id="recipeCount">Loading...</span>
+            </div>
+
+            <div id="recipeContainer" class="grid">
+                <p class="loading">Finding something delicious...</p>
+            </div>
+
+            <p id="emptyMessage" class="empty hidden">
+                No recipes found. Try another search or change your filters.
             </p>
+
+            <div class="center">
+                <button
+                    id="loadMoreButton"
+                    class="button outline hidden"
+                    type="button"
+                >
+                    Show more recipes
+                </button>
+            </div>
         </section>
 
-        <section id="recipeDetails" class="recipe-details hidden">
-            <h2 class="details-heading">RECIPE DETAILS</h2>
-            <div id="detailsContent"></div>
-            <button type="button" id="backBtn" class="back-button">
-                BACK TO SEARCH
-            </button>
-        </section>
+        <section class="section recent-section" id="recent">
+            <div class="heading">
+                <div>
+                    <p class="eyebrow">YOUR LITTLE COOKBOOK</p>
+                    <h2>Recently viewed</h2>
+                </div>
 
+                <p>Recipes you opened recently.</p>
+            </div>
+
+            <div id="recentContainer" class="recent-grid">
+                <p>Your recently viewed recipes will appear here.</p>
+            </div>
+        </section>
     </main>
+
+    <footer>
+        <a class="brand" href="#home">
+            Sangkap to Sarap<span>.</span>
+        </a>
+
+        <p>Made for curious cooks and hungry hearts.</p>
+
+        <small>
+            Recipe data by
+            <a
+                href="https://www.themealdb.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >TheMealDB</a>.
+        </small>
+    </footer>
+
+    <div
+        id="recipeModal"
+        class="modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Recipe details"
+    >
+        <div id="modalBackdrop" class="backdrop"></div>
+
+        <article class="modal-panel">
+            <button
+                id="closeModal"
+                class="close"
+                aria-label="Close recipe details"
+                type="button"
+            >×</button>
+
+            <div id="modalContent"></div>
+        </article>
+    </div>
+
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
